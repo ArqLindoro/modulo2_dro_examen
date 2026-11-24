@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Examen DRO Puebla - Módulo 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            user-select: none;
+        }
+
+        /* Estilos personalizados para barras de desplazamiento */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Animación sutil para las tarjetas */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos de impresión / PDF si el usuario decide imprimir el certificado */
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: white; }
+            .print-only { display: block !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- ENCABEZADO SUPERIOR INSTITUCIONAL -->
+    <header class="bg-slate-900 text-white shadow-lg border-b-4 border-amber-500 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-amber-500 text-slate-900 p-2 rounded-lg font-extrabold text-xl tracking-tight">
+                    <i class="fa-solid fa-compass-drafting"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base sm:text-lg leading-tight tracking-wide">SIMULADOR DE CERTIFICACIÓN DRO</h1>
+                    <p class="text-xs text-slate-300 font-medium">Módulo 2: Diseño Urbano, Proyecto Arquitectónico, Indivisos e Instalaciones | Municipio de Puebla</p>
+                </div>
+            </div>
+            
+            <!-- Reloj en tiempo real (visible solo durante el examen) -->
+            <div id="exam-timer-container" class="hidden flex items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-md border border-slate-700">
+                <i class="fa-regular fa-clock text-amber-400"></i>
+                <span id="exam-timer" class="font-mono font-bold text-amber-400 text-sm sm:text-base">00:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- =====================================================================
+             PANTALLA 1: INICIO Y REGISTRO DE ASPIRANTE
+             ===================================================================== -->
+        <section id="screen-welcome" class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in">
+            <div class="bg-gradient-to-r from-slate-800 to-slate-900 px-6 py-8 sm:px-10 text-white relative overflow-hidden">
+                <div class="relative z-10">
+                    <span class="inline-block bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+                        Curso de Inducción CAADROC Puebla
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mb-2">Evaluación Técnica-Normativa (Módulo 2)</h2>
+                    <p class="text-slate-300 text-sm sm:text-base">
+                        Instrumento de autoevaluación sobre Diseño Urbano Sustentable, Proyecto Arquitectónico, Validación de Indivisos, Construcción Virtual e Instalaciones Especiales (Eléctricas, Hidrosanitarias y Gas).
+                    </p>
+                </div>
+                <i class="fa-solid fa-city absolute -right-6 -bottom-6 text-9xl text-slate-800/60 z-0"></i>
+            </div>
+
+            <div class="p-6 sm:p-10 space-y-6">
+                <!-- Datos del Examen -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-list-ol"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-medium">Reactivos</p>
+                            <p class="font-bold text-slate-800">20 Preguntas</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-medium">Mínimo Aprobatorio</p>
+                            <p class="font-bold text-slate-800">80% (16/20)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 font-medium">Base Legal</p>
+                            <p class="font-bold text-slate-800">COREMUN / NOM / Leyes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de Identificación -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 border-b pb-2">Datos del Sustentante</h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="input-name" class="block text-sm font-semibold text-slate-700 mb-1">
+                                Nombre Completo y Grado Académico <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="input-name" placeholder="Ej. Arq. David Lindoro Juárez" 
+                                class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition text-sm">
+                        </div>
+                        <div>
+                            <label for="input-colegio" class="block text-sm font-semibold text-slate-700 mb-1">
+                                Colegio de Profesionistas / Institución
+                            </label>
+                            <input type="text" id="input-colegio" placeholder="Ej. CIAMEPAC / CAVAPAC / CICP" 
+                                class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition text-sm">
+                        </div>
+                    </div>
+                    <p id="error-msg" class="text-red-600 text-xs font-semibold hidden">
+                        <i class="fa-solid fa-circle-exclamation mr-1"></i> Por favor ingresa tu nombre para generar tu hoja de evaluación.
+                    </p>
+                </div>
+
+                <!-- Instrucciones -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-sm text-amber-900 space-y-1.5">
+                    <p class="font-bold"><i class="fa-solid fa-circle-info mr-1.5"></i>Instrucciones de Evaluación:</p>
+                    <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm text-amber-800">
+                        <li>Lee detenidamente cada caso práctico o reactivo normativo antes de seleccionar una respuesta.</li>
+                        <li>Puedes navegar libremente entre las 20 preguntas usando el panel lateral o los botones inferior/superior.</li>
+                        <li>Al finalizar, obtendrás tu calificación detallada, diagnóstico por área temática y el fundamento legal exacto de cada reactivo.</li>
+                    </ul>
+                </div>
+
+                <div class="pt-2 flex justify-end">
+                    <button onclick="startExam()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-8 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer">
+                        <span>Comenzar Evaluación</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================================
+             PANTALLA 2: INTERFAZ DEL EXAMEN
+             ===================================================================== -->
+        <section id="screen-exam" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 fade-in">
+            
+            <!-- Columna Principal: Pregunta Actual (8 cols en desktop) -->
+            <div class="lg:col-span-8 flex flex-col space-y-4">
+                
+                <!-- Barra de progreso móvil/desktop -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <span id="question-badge" class="bg-slate-900 text-white text-xs font-bold px-3 py-1 rounded-md">
+                            Pregunta 1 de 20
+                        </span>
+                        <span id="question-topic" class="text-xs font-semibold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-md hidden sm:inline-block">
+                            Tema
+                        </span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-slate-500">
+                        <span>Respondidas:</span>
+                        <span id="answered-counter" class="text-slate-900 font-bold">0/20</span>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Pregunta -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200 flex-grow flex flex-col justify-between">
+                    <div>
+                        <!-- Tema en móvil -->
+                        <span id="question-topic-mobile" class="text-xs font-semibold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-md inline-block sm:hidden mb-3">
+                            Tema
+                        </span>
+                        
+                        <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed mb-6">
+                            Cargando pregunta...
+                        </h3>
+
+                        <!-- Contenedor de Opciones -->
+                        <div id="options-container" class="space-y-3">
+                            <!-- Las opciones se renderizan dinámicamente con JS -->
+                        </div>
+                    </div>
+
+                    <!-- Botonera de Navegación Inferior -->
+                    <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                        <button id="btn-prev" onclick="prevQuestion()" class="px-4 py-2.5 rounded-lg border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-chevron-left"></i>
+                            <span>Anterior</span>
+                        </button>
+
+                        <button id="btn-flag" onclick="toggleFlag()" class="px-3 py-2.5 rounded-lg border border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100 font-semibold text-xs sm:text-sm transition flex items-center space-x-1.5 cursor-pointer">
+                            <i class="fa-regular fa-flag" id="flag-icon"></i>
+                            <span id="flag-text">Marcar para revisar</span>
+                        </button>
+
+                        <button id="btn-next" onclick="nextQuestion()" class="px-5 py-2.5 rounded-lg bg-slate-900 text-white font-semibold text-sm hover:bg-slate-800 transition flex items-center space-x-2 cursor-pointer">
+                            <span>Siguiente</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Lateral: Mapa de Navegación y Envío (4 cols en desktop) -->
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white p-5 rounded-2xl shadow-md border border-slate-200 sticky top-24">
+                    <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wider mb-3 pb-2 border-b flex items-center justify-between">
+                        <span>Navegador de Reactivos</span>
+                        <i class="fa-solid fa-table-cells text-slate-400"></i>
+                    </h4>
+                    
+                    <!-- Cuadrícula de 20 botones -->
+                    <div id="question-grid" class="grid grid-cols-5 gap-2 mb-5">
+                        <!-- Botones generados por JS -->
+                    </div>
+
+                    <!-- Leyenda de colores -->
+                    <div class="space-y-1.5 text-xs text-slate-600 mb-6 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3.5 h-3.5 rounded bg-slate-900 inline-block"></span>
+                            <span>Pregunta actual</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3.5 h-3.5 rounded bg-emerald-500 inline-block"></span>
+                            <span>Respondida</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3.5 h-3.5 rounded bg-amber-400 inline-block"></span>
+                            <span>Marcada para revisión</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3.5 h-3.5 rounded bg-white border border-slate-300 inline-block"></span>
+                            <span>Sin responder</span>
+                        </div>
+                    </div>
+
+                    <button onclick="confirmSubmitExam()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow transition flex items-center justify-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Finalizar y Calificar Examen</span>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================================
+             PANTALLA 3: RESULTADOS, DIAGNÓSTICO Y RETROALIMENTACIÓN
+             ===================================================================== -->
+        <section id="screen-results" class="hidden max-w-5xl mx-auto space-y-6 fade-in">
+            
+            <!-- Tarjeta Resumen de Calificación -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                <div id="result-banner" class="px-6 py-8 sm:px-10 text-white flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div class="text-center sm:text-left space-y-1">
+                        <span id="result-status-badge" class="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider mb-2">
+                            ESTATUS
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold" id="result-user-name">Nombre del Aspirante</h2>
+                        <p class="text-sm opacity-90" id="result-user-colegio">Colegio / Institución</p>
+                        <p class="text-xs opacity-75 pt-1" id="result-timestamp">Fecha y tiempo empleado</p>
+                    </div>
+
+                    <!-- Marcador Circular / Grande -->
+                    <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5 text-center min-w-[160px]">
+                        <p class="text-xs uppercase tracking-wider font-semibold opacity-80">Calificación Final</p>
+                        <p class="text-4xl sm:text-5xl font-black my-1" id="result-score-pct">0%</p>
+                        <p class="text-sm font-bold" id="result-score-fraction">0 / 20 aciertos</p>
+                    </div>
+                </div>
+
+                <!-- Desglose por Área Temática -->
+                <div class="p-6 sm:p-8 bg-slate-50 border-b border-slate-200">
+                    <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center">
+                        <i class="fa-solid fa-chart-pie text-amber-500 mr-2"></i>
+                        Desempeño por Área Normativa
+                    </h3>
+                    <div id="topic-breakdown" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Generado por JS -->
+                    </div>
+                </div>
+
+                <!-- Acciones Post-Examen -->
+                <div class="px-6 py-4 bg-white flex flex-wrap items-center justify-between gap-4 no-print">
+                    <div class="flex items-center space-x-2">
+                        <button onclick="filterReview('all')" id="filter-all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-white cursor-pointer">Todas (20)</button>
+                        <button onclick="filterReview('incorrect')" id="filter-incorrect" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-red-100 text-red-700 hover:bg-red-200 cursor-pointer">Incorrectas</button>
+                        <button onclick="filterReview('correct')" id="filter-correct" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700 hover:bg-emerald-200 cursor-pointer">Correctas</button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <button onclick="window.print()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold flex items-center space-x-1.5 cursor-pointer">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Imprimir / Guardar PDF</span>
+                        </button>
+                        <button onclick="restartExam()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-900 text-xs sm:text-sm font-bold flex items-center space-x-1.5 cursor-pointer">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Nuevo Intento</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revisión Detallada de Reactivos -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 px-1">Revisión Técnica y Fundamento Legal</h3>
+                <div id="review-container" class="space-y-4">
+                    <!-- Tarjetas de revisión generadas por JS -->
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- MODAL DE CONFIRMACIÓN PARA FINALIZAR -->
+    <div id="submit-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center space-x-3 text-amber-600">
+                <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                <h3 class="text-lg font-bold text-slate-900">¿Finalizar Evaluación?</h3>
+            </div>
+            <p id="modal-warning-text" class="text-sm text-slate-600 leading-relaxed">
+                Estás a punto de enviar tus respuestas para calificación. Una vez finalizado, no podrás modificar tus elecciones.
+            </p>
+            <div class="flex justify-end space-x-3 pt-2">
+                <button onclick="closeModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 cursor-pointer">
+                    Revisar respuestas
+                </button>
+                <button onclick="gradeExam()" class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm cursor-pointer">
+                    Sí, calificar ahora
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-12 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+            <p>Simulador de Estudio para Aspirantes a Director Responsable de Obra (DRO) - Municipio de Puebla.</p>
+            <p class="mt-1 sm:mt-0">Basado en el COREMUN (Cap. 17), Ley de Condominio, NOM-001-SEDE, NOM-004-SEDG y Normas SEDATU.</p>
+        </div>
+    </footer>
+
+    <!-- =====================================================================
+         LÓGICA JAVASCRIPT Y BANCO DE PREGUNTAS NORMATIVAS
+         ===================================================================== -->
+    <script>
+        // BANCO DE 20 PREGUNTAS ESTRUCTURADAS DEL MÓDULO 2
+        const QUESTIONS_DATA = [
+            {
+                id: 1,
+                topic: "Diseño Urbano Sustentable",
+                question: "De acuerdo con la comparativa normativa entre la Ley de Control de Proyectos y Edificaciones (LCPEMP) y el COREMUN para el Municipio de Puebla, ¿cuántos años de experiencia profesional acreditada en la especialidad se exigen para registrarse como Corresponsable en Diseño Urbano en el padrón municipal?",
+                options: [
+                    "2 años de experiencia profesional.",
+                    "3 años de experiencia profesional.",
+                    "5 años de experiencia profesional.",
+                    "10 años de experiencia profesional."
+                ],
+                correct: 2,
+                reference: "COREMUN Puebla Art. 672-VII y Ponencia Corresponsable en Diseño Urbano Sustentable (Comparativa LCPEMP vs COREMUN: 2 años estatal vs 5 años padrón Municipio de Puebla)."
+            },
+            {
+                id: 2,
+                topic: "Diseño Urbano Sustentable",
+                question: "Según el artículo 680 fracción II del COREMUN, ¿a partir de qué número de viviendas en conjuntos habitacionales es obligatoria la firma del Corresponsable en Diseño Urbano Sustentable?",
+                options: [
+                    "A partir de 10 viviendas.",
+                    "A partir de 50 viviendas.",
+                    "A partir de 100 viviendas.",
+                    "En cualquier conjunto habitacional mayor a 25 viviendas."
+                ],
+                correct: 2,
+                reference: "COREMUN Art. 680 fracción II: Exige responsiva del Corresponsable en Diseño Urbano Sustentable en conjuntos habitacionales a partir de 100 viviendas y en todos los estudios de impacto urbano o urbano-ambiental."
+            },
+            {
+                id: 3,
+                topic: "Diseño Urbano Sustentable",
+                question: "En el análisis normativo de coeficientes del suelo conforme al PMDUS de Puebla, ¿cuál es la distribución obligatoria exigida para el Coeficiente de Absorción del Suelo (C.A.S.)?",
+                options: [
+                    "Máximo 50% recubrimiento/pavimento y mínimo 50% área verde.",
+                    "Máximo 30% recubrimiento/pavimento y mínimo 70% área verde libre natural.",
+                    "Máximo 20% recubrimiento/pavimento y mínimo 80% área verde libre natural.",
+                    "100% área permeable libre de cualquier tipo de pavimento."
+                ],
+                correct: 1,
+                reference: "Normas Técnicas del PMDUS Puebla (Coeficientes del Suelo): El C.A.S. establece el porcentaje libre para filtración de agua al subsuelo con máximo 30% de recubrimiento/pavimento y mínimo 70% de área verde libre natural."
+            },
+            {
+                id: 4,
+                topic: "Diseño Urbano Sustentable",
+                question: "¿Qué Norma Oficial Mexicana define los criterios de diseño geométrico, accesibilidad, seguridad vial, jerarquía de movilidad, banquetas, ciclovías, intersecciones y calles completas?",
+                options: [
+                    "NOM-001-SEDATU-2021",
+                    "NOM-004-SEDATU-2023",
+                    "NOM-005-SEDATU-2024",
+                    "NOM-086-SCT2-2023"
+                ],
+                correct: 1,
+                reference: "NOM-004-SEDATU-2023: Define criterios de diseño geométrico, accesibilidad, seguridad vial, jerarquía de movilidad, banquetas, ciclovías, intersecciones y calles completas en proyectos urbanos."
+            },
+            {
+                id: 5,
+                topic: "Diseño Urbano Sustentable",
+                question: "Conforme al artículo 1067 del COREMUN, ¿cuál es el objeto principal del Estudio de Impacto Vial en el Municipio de Puebla?",
+                options: [
+                    "Calcular exclusivamente el número de cajones para vehículos automotores particulares.",
+                    "Dictaminar sobre el impacto del proyecto en los diversos modos de transporte en su ámbito de influencia, generar medidas de mitigación, alternativas de movilidad y equipamiento peatonal, ciclista y vehicular.",
+                    "Sustituir la manifestación de impacto ambiental ante la autoridad estatal.",
+                    "Determinar el valor catastral de las vialidades colindantes al predio."
+                ],
+                correct: 1,
+                reference: "COREMUN Art. 1067: Dictamina sobre el impacto del proyecto en los diversos modos de transporte en su ámbito de influencia para generar medidas de mitigación y alternativas de movilidad."
+            },
+            {
+                id: 6,
+                topic: "Validación de Indivisos",
+                question: "De acuerdo con el artículo 7 de la Ley que Regula el Régimen de Propiedad en Condominio para el Estado de Puebla (2021), ¿cuál es la base fundamental de cálculo para determinar el porcentaje de indiviso en un Condominio Horizontal?",
+                options: [
+                    "La superficie privativa de construcción dividida entre el total de construcción privativa.",
+                    "La superficie privativa de terreno dividida entre el total de terreno privativo.",
+                    "El valor comercial de la edificación dividido entre el avalúo catastral del lote.",
+                    "La suma de superficie construida más áreas comunes dividida entre el número de viviendas."
+                ],
+                correct: 1,
+                reference: "Ley que Regula el Régimen de Propiedad en Condominio para el Estado de Puebla (2021), Art. 7: En condominio horizontal la base de cálculo es el TERRENO (Sup. Privativa de Terreno ÷ Total Terreno Privativo × 100); la construcción no determina el indiviso."
+            },
+            {
+                id: 7,
+                topic: "Validación de Indivisos",
+                question: "En un Condominio Mixto donde una vivienda tipo departamento representa el 10% de indiviso respecto a su torre (cálculo vertical) y el lote de dicha torre representa el 20% respecto al macro-desarrollo (cálculo horizontal), ¿cuál es su porcentaje de indiviso final en el conjunto?",
+                options: [
+                    "30.00%",
+                    "15.00%",
+                    "2.00%",
+                    "0.50%"
+                ],
+                correct: 2,
+                reference: "Metodología de Cálculo Condominio Mixto (COREMUN Cap. 17 / Formato Anexo B): Se aplica combinación multiplicativa (% Indiviso Vertical × % Indiviso Horizontal = 10% × 20% = 2.00% del total)."
+            },
+            {
+                id: 8,
+                topic: "Validación de Indivisos",
+                question: "Al auditar y validar el Formato Oficial Anexo B (FORM. 1203/DGyDU/082224) antes de estampar su firma, ¿cuál es el margen de tolerancia permitido en la sumatoria total de los porcentajes de indiviso?",
+                options: [
+                    "Tolerancia de ±0.05% por redondeo de decimales.",
+                    "Tolerancia de ±0.01% (99.99% o 100.01% son admisibles).",
+                    "Tolerancia cero: la suma debe ser exactamente 100.00%.",
+                    "Tolerancia de ±0.10% siempre que coincida con la escritura."
+                ],
+                correct: 2,
+                reference: "COREMUN Cap. 17 / Formato Anexo B: Tolerancia cero en decimales; la suma de indivisos debe ser exactamente 100.00%, ya que un 99.99% o 100.01% es motivo de rechazo técnico en Catastro y Notaría."
+            },
+            {
+                id: 9,
+                topic: "Validación de Indivisos",
+                question: "Conforme a los artículos 49 y 50 de la Ley que Regula el Régimen de Propiedad en Condominio para el Estado de Puebla (2021), ¿a cuánto asciende la sanción económica máxima por irregularidades o incumplimientos en la constitución y validación del régimen?",
+                options: [
+                    "Hasta 50 UMAs en exhibición única.",
+                    "Hasta 150 UMAs diarias, además de responsabilidad civil solidaria y posible nulidad del régimen.",
+                    "Hasta 500 UMAs por cada unidad privativa.",
+                    "Únicamente amonestación por escrito sin sanción pecuniaria."
+                ],
+                correct: 1,
+                reference: "Ley que Regula el Régimen de Propiedad en Condominio para el Estado de Puebla (2021), Arts. 49 y 50: Sanciones de hasta 150 UMAs diarias, responsabilidad civil solidaria de DRO y Corresponsable, y posible nulidad del régimen."
+            },
+            {
+                id: 10,
+                topic: "Proyecto Arquitectónico y BIM",
+                question: "Según el artículo 915 del COREMUN, ¿en qué dos grandes bloques documentales se estructura el Proyecto Ejecutivo que debe revisar y coordinar el DRO?",
+                options: [
+                    "Anteproyecto conceptual y presupuesto paramétrico de obra.",
+                    "Proyecto de Arquitectura (plantas, conjunto, cortes, fachadas, memoria, cuadro de áreas y localización en solapa) y Proyecto de Ingenierías (estructuras, hidráulicas, sanitarias, gas, eléctrica y especiales).",
+                    "Memoria descriptiva y bitácora electrónica de obra.",
+                    "Estudio de impacto vial y dictamen de protección civil."
+                ],
+                correct: 1,
+                reference: "COREMUN Art. 915: Divide el Proyecto Ejecutivo en I. Proyecto de Arquitectura y II. Proyecto de Ingenierías (estructuras, hidráulicas, sanitarias, gas, eléctrica e instalaciones especiales)."
+            },
+            {
+                id: 11,
+                topic: "Proyecto Arquitectónico y BIM",
+                question: "En la revisión normativa de espacios habitables y circulaciones de una vivienda unifamiliar conforme al COREMUN (Arts. 926 a 941), ¿cuáles son las dimensiones mínimas reglamentarias para una recámara, altura libre interior y escalera?",
+                options: [
+                    "Recámara 8.00 m², altura libre 2.20 m, huella mínima 24 cm y peralte máximo 19 cm.",
+                    "Recámara 9.00 m², altura libre 2.30 m, ancho de escalera ≥90 cm, huella ≥25 cm y peralte ≤18 cm.",
+                    "Recámara 10.00 m², altura libre 2.50 m, huella ≥28 cm y peralte ≤17 cm.",
+                    "Recámara 7.50 m², altura libre 2.10 m, huella ≥23 cm y peralte ≤20 cm."
+                ],
+                correct: 1,
+                reference: "COREMUN Arts. 926-928 y 936-941: Recámara mínima 9.00 m² (Art. 926), altura interior mínima 2.30 m (Art. 927), ancho acceso principal 1.00 m (Art. 928) y escaleras con ancho ≥90 cm, huella ≥25 cm, peralte ≤18 cm y altura libre ≥2.00 m (Art. 936)."
+            },
+            {
+                id: 12,
+                topic: "Proyecto Arquitectónico y BIM",
+                question: "De acuerdo con el artículo 680 fracción III inciso q) del COREMUN, ¿cuáles son los cuatro umbrales dimensionales o de aforo que hacen obligatoria la firma del Corresponsable en Diseño Arquitectónico en edificaciones generales?",
+                options: [
+                    "Más de 1,000 m² construidos, más de 15 m de altura, o concurrencia mayor a 125/400 personas.",
+                    "Más de 2,000 m² construidos, más de 20 m de altura sobre nivel medio de banqueta, o concurrencia mayor a 200 personas en local cerrado / 800 personas en local abierto.",
+                    "Más de 500 m² construidos, más de 10 m de altura, o más de 100 personas.",
+                    "Más de 3,000 m² construidos, más de 25 m de altura, o más de 500 personas."
+                ],
+                correct: 1,
+                reference: "COREMUN Art. 680-III inciso q): Activa la corresponsiva arquitectónica cuando se rebasa >2,000 m² construidos, >20 m de altura sobre nivel medio de banqueta, >200 personas en local cerrado o >800 personas en local abierto."
+            },
+            {
+                id: 13,
+                topic: "Construcción Virtual e IA",
+                question: "En la metodología de validación de proyectos ejecutivos mediante Construcción Virtual e Inteligencia Artificial (NotebookLM), ¿cuál es el principio fundamental respecto a la validez legal y técnica de estas herramientas?",
+                options: [
+                    "El dictamen generado por Inteligencia Artificial sustituye la firma del Corresponsable en obras menores.",
+                    "La IA y el modelo virtual aportan trazabilidad, citas normativas y detección de interferencias, pero nunca sustituyen el juicio técnico ni la firma del DRO; 'La IA no firma, el DRO sí'.",
+                    "El modelo BIM tiene validez automática como licencia de construcción ante la Dirección.",
+                    "Si una norma no aparece en el chat de IA, se puede asumir como permitida por criterio profesional."
+                ],
+                correct: 1,
+                reference: "Ponencia Construcción Virtual e IA (Grupo Alaris) y BIM Revit (Arktelic Studio): 'La IA no firma. El DRO sí' y 'Revit no firma, Revit no dictamina'; la tecnología valida constructibilidad y citas, pero no sustituye el juicio técnico ni la responsiva."
+            },
+            {
+                id: 14,
+                topic: "Instalaciones Eléctricas y Mecánicas",
+                question: "Conforme al artículo 680 fracción V del COREMUN, ¿en qué casos se exige obligatoriamente la responsiva de un Corresponsable en Instalaciones Eléctricas para obtener la licencia de construcción?",
+                options: [
+                    "Únicamente en instalaciones industriales de alta tensión.",
+                    "En construcciones mayores de 500 metros cuadrados que cuenten con instalaciones eléctricas en cualquiera de los niveles de tensión de operación, cualquiera que sea su uso, público o privado.",
+                    "En cualquier vivienda unifamiliar mayor a 120 metros cuadrados.",
+                    "Solo en edificios públicos con concentración mayor a 200 personas."
+                ],
+                correct: 1,
+                reference: "COREMUN Art. 680 fracción V: Exige Corresponsable en Instalaciones Eléctricas para construcciones mayores de 500 m² que cuenten con instalaciones eléctricas en cualquier nivel de tensión, de uso público o privado."
+            },
+            {
+                id: 15,
+                topic: "Instalaciones Eléctricas y Mecánicas",
+                question: "De acuerdo con el artículo 48 fracción V y 154 de la Ley del Sector Eléctrico (LESE) y la Ley de Infraestructura de la Calidad, ¿qué requisito es indispensable para conectar instalaciones destinadas al uso de energía eléctrica en alta tensión o en lugares de concentración pública?",
+                options: [
+                    "Solo el visto bueno verbal del contratista eléctrico.",
+                    "Que una Unidad de Inspección (UVIE) acreditada conforme a la Ley de Infraestructura de la Calidad certifique que la instalación cumple con las NOM aplicables.",
+                    "Únicamente el recibo de pago de derechos ante el Ayuntamiento.",
+                    "Una carta responsiva simple del propietario del inmueble."
+                ],
+                correct: 1,
+                reference: "Ley del Sector Eléctrico (LESE) Arts. 48-V y 154: Exige comprobar mediante certificado de una Unidad de Inspección acreditada bajo la Ley de Infraestructura de la Calidad el cumplimiento de la NOM-001-SEDE-2012."
+            },
+            {
+                id: 16,
+                topic: "Instalaciones Eléctricas y Mecánicas",
+                question: "Según la NOM-001-SEDE-2012 (Título 4, Principios Fundamentales, numeral 4.1.2.2), ¿cuál constituye el principio fundamental de seguridad para la protección contra contacto indirecto y corrientes de falla?",
+                options: [
+                    "Aumentar el calibre del conductor neutro al doble de la fase.",
+                    "Aplicar el método de conexión de puesta a tierra y desconectar automáticamente la alimentación en determinado tiempo ante corrientes de falla.",
+                    "Instalar exclusivamente tubería conduit de PVC en toda la edificación.",
+                    "Eliminar los dispositivos de interrupción termomagnética en tableros derivados."
+                ],
+                correct: 1,
+                reference: "NOM-001-SEDE-2012 Título 4, numeral 4.1.2.2: Establece la desconexión automática de la alimentación y la aplicación del método de conexión de puesta a tierra como principio fundamental contra contacto indirecto."
+            },
+            {
+                id: 17,
+                topic: "Instalaciones Hidrosanitarias",
+                question: "De acuerdo con el artículo 680 fracción IV del COREMUN, ¿cuál de los siguientes grupos de edificaciones requiere obligatoriamente la firma de un Corresponsable en Instalaciones Hidráulicas y Sanitarias?",
+                options: [
+                    "Viviendas unifamiliares aisladas menores a 250 m².",
+                    "Conjuntos habitacionales de 100 viviendas o más, hospitales, clínicas, baños públicos, lavanderías, hoteles, gasolineras y centros comerciales.",
+                    "Locales comerciales menores a 100 m² sin servicios sanitarios al público.",
+                    "Bodegas de almacenamiento seco sin red hidráulica."
+                ],
+                correct: 1,
+                reference: "COREMUN Art. 680 fracción IV: Exige Corresponsable en Instalaciones Hidráulicas y Sanitarias en conjuntos habitacionales de 100 viviendas, baños públicos, lavanderías, hospitales, clínicas, hoteles, gasolineras, escuelas y centros comerciales."
+            },
+            {
+                id: 18,
+                topic: "Instalaciones de Gas",
+                question: "Según el artículo 680 fracción VII del COREMUN, ¿a partir de qué número de viviendas se exige obligatoriamente la responsiva del Corresponsable en Instalaciones de Gas en construcciones con instalaciones fijas de aprovechamiento de gas natural o Gas L.P.?",
+                options: [
+                    "A partir de 5 viviendas.",
+                    "A partir de 10 viviendas.",
+                    "A partir de 50 viviendas.",
+                    "A partir de 100 viviendas."
+                ],
+                correct: 1,
+                reference: "COREMUN Art. 680 fracción VII: Exige Corresponsable en Instalaciones de Gas para sistemas de distribución por ductos y en toda construcción con instalaciones fijas de gas natural o Gas L.P., o subterráneas, a partir de 10 viviendas."
+            },
+            {
+                id: 19,
+                topic: "Instalaciones de Gas",
+                question: "Conforme a la NOM-004-SEDG-2004, ¿qué fórmula matemática debe utilizarse para calcular la caída de presión porcentual en tuberías de servicio que conducen Gas L.P. en régimen de baja presión regulada, y de qué color deben pintarse dichas tuberías en estado de vapor?",
+                options: [
+                    "Ecuación de Bernoulli; color azul claro.",
+                    "Fórmula del Dr. Pole (%Hb = Q² × Fb × L); color amarillo.",
+                    "Fórmula de Darcy-Weisbach; color rojo óxido.",
+                    "Fórmula de Hazen-Williams; color amarillo con bandas blancas."
+                ],
+                correct: 1,
+                reference: "NOM-004-SEDG-2004: Para baja presión regulada se usa la fórmula del Dr. Pole (%Hb = Q² × Fb × L); las tuberías de Gas L.P. en estado de vapor se pintan de color amarillo (y amarillo con bandas blancas en estado líquido)."
+            },
+            {
+                id: 20,
+                topic: "Instalaciones de Gas",
+                question: "De acuerdo con la tabla de distancias mínimas de seguridad de la NOM-004-SEDG-2004, ¿cuál es la separación mínima permitida entre una tubería que conduce Gas L.P. y conductores eléctricos sin canalización o ducto cuando la tensión nominal es mayor a 127 volts?",
+                options: [
+                    "2 cm.",
+                    "10 cm.",
+                    "20 cm.",
+                    "50 cm."
+                ],
+                correct: 3,
+                reference: "NOM-004-SEDG-2004 (Distancia mínima de tuberías de gas con conductores eléctricos): Para tensión nominal mayor a 127 volts, la distancia mínima es de 20 cm si el conductor está dentro de canalizaciones/ductos y de 50 cm si está sin canalizaciones o ductos."
+            }
+        ];
+
+        // ESTADO DE LA APLICACIÓN
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(QUESTIONS_DATA.length).fill(null);
+        let flaggedQuestions = new Array(QUESTIONS_DATA.length).fill(false);
+        let timerInterval = null;
+        let secondsElapsed = 0;
+        let userName = "";
+        let userColegio = "";
+
+        // INICIAR EXAMEN
+        function startExam() {
+            const nameInput = document.getElementById('input-name').value.trim();
+            const colegioInput = document.getElementById('input-colegio').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+
+            if (!nameInput) {
+                errorMsg.classList.remove('hidden');
+                document.getElementById('input-name').focus();
+                return;
+            }
+
+            errorMsg.classList.add('hidden');
+            userName = nameInput;
+            userColegio = colegioInput || "Aspirante Independiente / Sin Colegio Especificado";
+
+            // Cambio de pantallas
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-exam').classList.remove('hidden');
+            document.getElementById('exam-timer-container').classList.remove('hidden');
+
+            // Inicializar cuadrícula y primera pregunta
+            renderQuestionGrid();
+            loadQuestion(0);
+            startTimer();
+        }
+
+        // TEMPORIZADOR
+        function startTimer() {
+            secondsElapsed = 0;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+                const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+                document.getElementById('exam-timer').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // RENDERIZAR CUADRÍCULA DE NAVEGACIÓN
+        function renderQuestionGrid() {
+            const grid = document.getElementById('question-grid');
+            grid.innerHTML = '';
+
+            QUESTIONS_DATA.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.textContent = idx + 1;
+                btn.onclick = () => loadQuestion(idx);
+                
+                let baseClasses = "h-9 rounded-lg font-bold text-xs transition flex items-center justify-center border cursor-pointer relative ";
+                
+                if (idx === currentQuestionIndex) {
+                    baseClasses += "bg-slate-900 text-white border-slate-900 ring-2 ring-amber-400";
+                } else if (flaggedQuestions[idx]) {
+                    baseClasses += "bg-amber-400 text-slate-900 border-amber-500";
+                } else if (userAnswers[idx] !== null) {
+                    baseClasses += "bg-emerald-500 text-white border-emerald-600";
+                } else {
+                    baseClasses += "bg-white text-slate-700 border-slate-300 hover:bg-slate-100";
+                }
+
+                btn.className = baseClasses;
+                grid.appendChild(btn);
+            });
+
+            // Actualizar contador de respondidas
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            document.getElementById('answered-counter').textContent = `${answeredCount}/${QUESTIONS_DATA.length}`;
+        }
+
+        // CARGAR PREGUNTA EN PANTALLA
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const q = QUESTIONS_DATA[index];
+
+            // Actualizar encabezados
+            document.getElementById('question-badge').textContent = `Pregunta ${index + 1} de ${QUESTIONS_DATA.length}`;
+            document.getElementById('question-topic').textContent = q.topic;
+            document.getElementById('question-topic-mobile').textContent = q.topic;
+            document.getElementById('question-text').textContent = `${index + 1}. ${q.question}`;
+
+            // Renderizar opciones
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const letters = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((optText, optIdx) => {
+                const isSelected = userAnswers[index] === optIdx;
+                
+                const optionCard = document.createElement('div');
+                optionCard.onclick = () => selectOption(optIdx);
+                
+                optionCard.className = `p-4 rounded-xl border-2 transition cursor-pointer flex items-start space-x-3.5 ${
+                    isSelected 
+                    ? 'border-slate-900 bg-slate-900/5 shadow-xs' 
+                    : 'border-slate-200 hover:border-amber-400 hover:bg-amber-50/30'
+                }`;
+
+                const letterBadge = document.createElement('span');
+                letterBadge.className = `w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 transition ${
+                    isSelected 
+                    ? 'bg-slate-900 text-amber-400' 
+                    : 'bg-slate-100 text-slate-600'
+                }`;
+                letterBadge.textContent = letters[optIdx];
+
+                const textSpan = document.createElement('span');
+                textSpan.className = `text-sm sm:text-base leading-snug ${isSelected ? 'font-semibold text-slate-900' : 'text-slate-700'}`;
+                textSpan.textContent = optText;
+
+                optionCard.appendChild(letterBadge);
+                optionCard.appendChild(textSpan);
+                optionsContainer.appendChild(optionCard);
+            });
+
+            // Actualizar estado de botones de navegación
+            document.getElementById('btn-prev').disabled = (index === 0);
+            
+            const btnNext = document.getElementById('btn-next');
+            if (index === QUESTIONS_DATA.length - 1) {
+                btnNext.innerHTML = `<span>Finalizar</span><i class="fa-solid fa-check"></i>`;
+                btnNext.onclick = confirmSubmitExam;
+                btnNext.classList.replace('bg-slate-900', 'bg-emerald-600');
+                btnNext.classList.replace('hover:bg-slate-800', 'hover:bg-emerald-700');
+            } else {
+                btnNext.innerHTML = `<span>Siguiente</span><i class="fa-solid fa-chevron-right"></i>`;
+                btnNext.onclick = nextQuestion;
+                btnNext.classList.replace('bg-emerald-600', 'bg-slate-900');
+                btnNext.classList.replace('hover:bg-emerald-700', 'hover:bg-slate-800');
+            }
+
+            // Actualizar botón de bandera
+            updateFlagButton();
+            renderQuestionGrid();
+        }
+
+        // SELECCIONAR RESPUESTA
+        function selectOption(optIdx) {
+            userAnswers[currentQuestionIndex] = optIdx;
+            loadQuestion(currentQuestionIndex);
+        }
+
+        // NAVEGACIÓN ANTERIOR / SIGUIENTE
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < QUESTIONS_DATA.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            }
+        }
+
+        // MARCAR PARA REVISIÓN
+        function toggleFlag() {
+            flaggedQuestions[currentQuestionIndex] = !flaggedQuestions[currentQuestionIndex];
+            updateFlagButton();
+            renderQuestionGrid();
+        }
+
+        function updateFlagButton() {
+            const isFlagged = flaggedQuestions[currentQuestionIndex];
+            const icon = document.getElementById('flag-icon');
+            const text = document.getElementById('flag-text');
+            const btn = document.getElementById('btn-flag');
+
+            if (isFlagged) {
+                icon.className = "fa-solid fa-flag text-amber-600";
+                text.textContent = "Marcada para revisar";
+                btn.classList.add('ring-2', 'ring-amber-400');
+            } else {
+                icon.className = "fa-regular fa-flag";
+                text.textContent = "Marcar para revisar";
+                btn.classList.remove('ring-2', 'ring-amber-400');
+            }
+        }
+
+        // MODAL DE CONFIRMACIÓN
+        function confirmSubmitExam() {
+            const unanswered = userAnswers.filter(a => a === null).length;
+            const warningText = document.getElementById('modal-warning-text');
+
+            if (unanswered > 0) {
+                warningText.innerHTML = `Aún tienes <strong class="text-red-600">${unanswered} pregunta(s) sin responder</strong>. Las preguntas sin contestar se calificarán como incorrectas. ¿Deseas finalizar de todos modos?`;
+            } else {
+                warningText.textContent = "Has respondido las 20 preguntas. ¿Deseas finalizar la evaluación y obtener tu diagnóstico normativo?";
+            }
+
+            const modal = document.getElementById('submit-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('submit-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // CALIFICAR EXAMEN Y MOSTRAR RESULTADOS
+        function gradeExam() {
+            closeModal();
+            clearInterval(timerInterval);
+
+            document.getElementById('screen-exam').classList.add('hidden');
+            document.getElementById('exam-timer-container').classList.add('hidden');
+            document.getElementById('screen-results').classList.remove('hidden');
+
+            let correctCount = 0;
+            const topicStats = {};
+
+            QUESTIONS_DATA.forEach((q, idx) => {
+                if (!topicStats[q.topic]) {
+                    topicStats[q.topic] = { total: 0, correct: 0 };
+                }
+                topicStats[q.topic].total++;
+
+                if (userAnswers[idx] === q.correct) {
+                    correctCount++;
+                    topicStats[q.topic].correct++;
+                }
+            });
+
+            const scorePct = Math.round((correctCount / QUESTIONS_DATA.length) * 100);
+            const passed = scorePct >= 80;
+
+            // Configurar Banner Superior
+            const banner = document.getElementById('result-banner');
+            const badge = document.getElementById('result-status-badge');
+            
+            if (passed) {
+                banner.className = "px-6 py-8 sm:px-10 text-white flex flex-col sm:flex-row items-center justify-between gap-6 bg-gradient-to-r from-emerald-700 to-teal-800";
+                badge.className = "inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider mb-2 bg-emerald-400/20 text-emerald-200 border border-emerald-300/30";
+                badge.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> APROBADO (MÍNIMO REQUERIDO: 80%)`;
+            } else {
+                banner.className = "px-6 py-8 sm:px-10 text-white flex flex-col sm:flex-row items-center justify-between gap-6 bg-gradient-to-r from-red-800 to-slate-900";
+                badge.className = "inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider mb-2 bg-red-500/20 text-red-200 border border-red-400/30";
+                badge.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> NO APROBADO (MÍNIMO REQUERIDO: 80%)`;
+            }
+
+            // Datos del sustentante
+            const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+            const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+            const now = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            document.getElementById('result-user-name').textContent = userName;
+            document.getElementById('result-user-colegio').textContent = userColegio;
+            document.getElementById('result-timestamp').textContent = `Evaluado el ${now} • Tiempo empleado: ${mins}:${secs} min`;
+            document.getElementById('result-score-pct').textContent = `${scorePct}%`;
+            document.getElementById('result-score-fraction').textContent = `${correctCount} de ${QUESTIONS_DATA.length} aciertos`;
+
+            // Renderizar Desglose por Área Temática
+            const breakdownContainer = document.getElementById('topic-breakdown');
+            breakdownContainer.innerHTML = '';
+
+            Object.keys(topicStats).forEach(topic => {
+                const stat = topicStats[topic];
+                const pct = Math.round((stat.correct / stat.total) * 100);
+                const barColor = pct >= 80 ? 'bg-emerald-500' : (pct >= 60 ? 'bg-amber-500' : 'bg-red-500');
+
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-2xs";
+                card.innerHTML = `
+                    <p class="text-xs font-bold text-slate-600 mb-1 truncate" title="${topic}">${topic}</p>
+                    <div class="flex items-end justify-between mb-2">
+                        <span class="text-xl font-extrabold text-slate-800">${pct}%</span>
+                        <span class="text-xs font-semibold text-slate-500">${stat.correct}/${stat.total}</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="${barColor} h-full rounded-full" style="width: ${pct}%"></div>
+                    </div>
+                `;
+                breakdownContainer.appendChild(card);
+            });
+
+            // Renderizar Tarjetas de Revisión Detallada
+            renderReviewCards('all');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // RENDERIZAR REVISIÓN DE RESPUESTAS
+        function renderReviewCards(filterType) {
+            const container = document.getElementById('review-container');
+            container.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+
+            QUESTIONS_DATA.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.correct;
+
+                if (filterType === 'correct' && !isCorrect) return;
+                if (filterType === 'incorrect' && isCorrect) return;
+
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-xl p-6 shadow-sm border-l-4 ${
+                    isCorrect ? 'border-emerald-500' : 'border-red-500'
+                }`;
+
+                let optionsHtml = '';
+                q.options.forEach((opt, oIdx) => {
+                    let styleClass = "p-3 rounded-lg border text-sm flex items-center justify-between ";
+                    let iconHtml = "";
+
+                    if (oIdx === q.correct) {
+                        styleClass += "bg-emerald-50 border-emerald-300 text-emerald-900 font-semibold";
+                        iconHtml = `<span class="text-xs font-bold text-emerald-700 bg-emerald-200/60 px-2 py-0.5 rounded"><i class="fa-solid fa-check mr-1"></i>Correcta</span>`;
+                    } else if (oIdx === userAns && !isCorrect) {
+                        styleClass += "bg-red-50 border-red-300 text-red-900 font-semibold";
+                        iconHtml = `<span class="text-xs font-bold text-red-700 bg-red-200/60 px-2 py-0.5 rounded"><i class="fa-solid fa-xmark mr-1"></i>Tu elección</span>`;
+                    } else {
+                        styleClass += "bg-slate-50/50 border-slate-200 text-slate-600";
+                    }
+
+                    optionsHtml += `
+                        <div class="${styleClass}">
+                            <span><strong class="mr-2">${letters[oIdx]}.</strong> ${opt}</span>
+                            ${iconHtml}
+                        </div>
+                    `;
+                });
+
+                const unansweredBadge = userAns === null 
+                    ? `<span class="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded ml-2">Sin responder</span>` 
+                    : '';
+
+                card.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <div class="flex items-center">
+                            <span class="font-bold text-xs px-2.5 py-1 rounded ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">
+                                Reactivo #${idx + 1} • ${isCorrect ? 'ACIERTO' : 'ERROR'}
+                            </span>
+                            ${unansweredBadge}
+                        </div>
+                        <span class="text-xs font-semibold text-slate-500">${q.topic}</span>
+                    </div>
+                    <p class="font-bold text-slate-800 text-base mb-4">${q.question}</p>
+                    <div class="space-y-2 mb-4">
+                        ${optionsHtml}
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-3.5 text-xs sm:text-sm text-slate-700 flex items-start space-x-2.5">
+                        <i class="fa-solid fa-scale-balanced text-slate-500 mt-0.5"></i>
+                        <div>
+                            <strong class="text-slate-900">Fundamento Normativo:</strong> ${q.reference}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            if (container.innerHTML === '') {
+                container.innerHTML = `<div class="bg-white p-8 rounded-xl text-center text-slate-500 text-sm border border-slate-200">No hay reactivos en esta categoría de filtro.</div>`;
+            }
+        }
+
+        // FILTRAR REVISIÓN
+        function filterReview(type) {
+            document.getElementById('filter-all').className = type === 'all' 
+                ? "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-white cursor-pointer" 
+                : "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer";
+            
+            document.getElementById('filter-incorrect').className = type === 'incorrect' 
+                ? "px-3 py-1.5 rounded-lg text-xs font-bold bg-red-600 text-white cursor-pointer" 
+                : "px-3 py-1.5 rounded-lg text-xs font-bold bg-red-100 text-red-700 hover:bg-red-200 cursor-pointer";
+
+            document.getElementById('filter-correct').className = type === 'correct' 
+                ? "px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white cursor-pointer" 
+                : "px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-700 hover:bg-emerald-200 cursor-pointer";
+
+            renderReviewCards(type);
+        }
+
+        // REINICIAR SIMULADOR
+        function restartExam() {
+            userAnswers = new Array(QUESTIONS_DATA.length).fill(null);
+            flaggedQuestions = new Array(QUESTIONS_DATA.length).fill(false);
+            currentQuestionIndex = 0;
+
+            document.getElementById('screen-results').classList.add('hidden');
+            document.getElementById('screen-welcome').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
